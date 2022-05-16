@@ -12,7 +12,7 @@ const authUser = async (req, res, next) => {
     return next();
   } catch (error) {
     console.log(error);
-    return res.sendStatus(500);
+    return res.sendStatus(401);
   }
 };
 

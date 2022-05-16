@@ -7,10 +7,12 @@ import cors from "cors";
 
 import categoryRouter from "./routers/categoryRouter.js";
 import customerRouter from "./routers/customerRouter.js";
+import deliveryRouter from "./routers/deliveryRouter.js";
 import ingRouter from "./routers/ingRouter.js";
 import productRouter from "./routers/productRouter.js";
 import prodIngRouter from "./routers/prodIngRouter.js";
 import purchaseRouter from "./routers/purchaseRouter.js";
+import saleRouter from "./routers/saleRouter.js";
 import userRouter from "./routers/userRouter.js";
 
 dotenv.config();
@@ -29,10 +31,12 @@ mongoose.connect(process.env.MONGO_DB, () => console.log("DB connected"));
 
 app.use("/category", categoryRouter);
 app.use("/customer", customerRouter);
+app.use("/delivery", deliveryRouter);
 app.use("/ing", ingRouter);
 app.use("/product", productRouter);
 app.use("/prodIng", prodIngRouter);
 app.use("/purchase", purchaseRouter);
+app.use("/sale", saleRouter);
 app.use("/user", userRouter);
 
 app.listen(process.env.PORT, () => console.log("Server is running"));

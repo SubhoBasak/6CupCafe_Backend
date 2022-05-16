@@ -12,16 +12,9 @@ const customerSchema = mongoose.Schema(
       index: true,
     },
     note: { type: String, trim: true },
-    expressTotal: { type: Number, default: 0, min: 0 },
-    expressBilling: { type: Number, default: 0, min: 0 },
-    deliveryTotal: { type: Number, default: 0, min: 0 },
-    homeDelivery: { type: Number, default: 0, min: 0 },
-    cashMode: { type: Number, default: 0 },
-    cardMode: { type: Number, default: 0 },
-    upiMode: { type: Number, default: 0 },
     reward: { type: Number, default: 0, min: 0 },
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
 export default mongoose.model("customerModel", customerSchema);

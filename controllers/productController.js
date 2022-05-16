@@ -35,7 +35,7 @@ export const getProduct = async (req, res) => {
 
 export const getProductDetails = async (req, res) => {
   try {
-    const prod = await productModel.findOne({ pid: req.query.pid }).lean();
+    const prod = await productModel.findOne({ _id: req.query.pid }).lean();
     if (!prod) return res.sendStatus(404);
 
     const ings = await prodIngModel
@@ -84,6 +84,36 @@ export const editProduct = async (req, res) => {
     }
 
     return res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+};
+
+export const prodOutOfStock = async (req, res) => {
+  try {
+    const result = await productModel
+      .findByIdAndUpdate({ _id: req.body.pid }, { inStock: false })
+      .select("_id")
+      .lean();
+
+    if (result) return res.sendStatus(200);
+    else return res.sendStatus(404);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+};
+
+export const prodInStock = async (req, res) => {
+  try {
+    const result = await productModel
+      .findByIdAndUpdate({ _id: req.body.pid }, { inStock: true })
+      .select("_id")
+      .lean();
+
+    if (result) return res.sendStatus(200);
+    else return res.sendStatus(404);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

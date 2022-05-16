@@ -3,6 +3,7 @@ import express from "express";
 import authUser from "../middlewares/authUser.js";
 import isAdmin from "../middlewares/isAdmin.js";
 import isCashier from "../middlewares/isCashier.js";
+import isCook from "../middlewares/isCook.js";
 
 import {
   addProduct,
@@ -10,6 +11,8 @@ import {
   editProduct,
   getProduct,
   getProductDetails,
+  prodInStock,
+  prodOutOfStock,
 } from "../controllers/productController.js";
 
 const router = express.Router();
@@ -23,5 +26,8 @@ router
 
 router.get("/details", authUser, isAdmin, getProductDetails);
 router.get("/cashier", authUser, isCashier, getProduct);
+router.get("/cook", authUser, isCook, getProduct);
+router.put("/stock_in", authUser, prodInStock);
+router.put("/stock_out", authUser, prodOutOfStock);
 
 export default router;
