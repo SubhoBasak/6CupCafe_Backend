@@ -5,6 +5,7 @@ const prodIngSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "productModel",
     required: true,
+    index: true,
   },
   ing: {
     type: mongoose.Schema.Types.ObjectId,

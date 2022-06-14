@@ -1,6 +1,10 @@
 import customerModel from "../models/customerModel.js";
+import deliveryModel from "../models/deliveryModel.js";
 import productModel from "../models/productModel.js";
+import prodIngModel from "../models/prodIngModel.js";
 import saleModel from "../models/saleModel.js";
+import ingModel from "../models/ingModel.js";
+import taxModel from "../models/taxModel.js";
 
 export const newSale = async (req, res) => {
   try {
@@ -26,13 +30,41 @@ export const newSale = async (req, res) => {
       customer: cst ? cst._id : null,
     });
 
+    if (req.body.orderType === 1) {
+      const delv = await deliveryModel.findById(req.body.delv).lean();
+
+      if (delv) sale.delivery = delv._id;
+      else return res.sendStatus(404);
+
+      sale.address = req.body.addr;
+    }
+
     for (let i = 0; i < req.body.items.length; i++) {
       const prd = await productModel.findById(req.body.items[i].pid);
       if (!prd) continue;
 
       sale.items.push({ item: prd._id, quantity: req.body.items[i].qnt });
       sale.total += prd.price * req.body.items[i].qnt;
+
+      const ings = await prodIngModel.find({ prod: prd._id }).lean();
+      for (let j = 0; j < ings.length; j++) {
+        const ing = await ingModel.findById(ings[j].ing);
+
+        if (!ing) await prodIngModel.findByIdAndDelete(ings[j].ing).lean();
+        else {
+          ing.curStock -= ings[j].qnt;
+          await ing.save();
+        }
+      }
     }
+
+    const taxes = await taxModel.find();
+    let tax = 0;
+
+    taxes.map((tax) => {
+      tax += (sale.total * tax.tax) / 100;
+    });
+    sale.total += tax;
 
     await sale.save();
     return res.sendStatus(200);
@@ -46,13 +78,28 @@ export const getCurOrders = async (req, res) => {
   try {
     return res.json(
       await saleModel
-        .find({ status: false })
+        .find({ status: false, orderType: 1 })
         .select("items date")
         .populate([
           { path: "items.item", select: "name" },
           { path: "customer", select: "name phone" },
         ])
         .sort({ _id: -1 })
+        .lean()
+    );
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+};
+
+export const getCstOrders = async (req, res) => {
+  try {
+    return res.json(
+      await saleModel
+        .find({ customer: req.query.cid })
+        .select("date payMethod orderType delivery total")
+        .populate("delivery", "name")
         .lean()
     );
   } catch (error) {

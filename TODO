@@ -1,0 +1,4 @@
+set floating precision
+calculate tax in backend - DONE
+seperate window for delivery in cook's panel
+print bill

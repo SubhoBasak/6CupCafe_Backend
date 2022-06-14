@@ -4,6 +4,7 @@ import upload from "express-fileupload";
 import helmet from "helmet";
 import dotenv from "dotenv";
 import cors from "cors";
+import fs from "fs";
 
 import categoryRouter from "./routers/categoryRouter.js";
 import customerRouter from "./routers/customerRouter.js";
@@ -13,9 +14,12 @@ import productRouter from "./routers/productRouter.js";
 import prodIngRouter from "./routers/prodIngRouter.js";
 import purchaseRouter from "./routers/purchaseRouter.js";
 import saleRouter from "./routers/saleRouter.js";
+import taxRouter from "./routers/taxRouter.js";
 import userRouter from "./routers/userRouter.js";
 
 dotenv.config();
+
+if (!fs.existsSync("static")) fs.mkdirSync("static");
 
 const app = express();
 
@@ -37,6 +41,7 @@ app.use("/product", productRouter);
 app.use("/prodIng", prodIngRouter);
 app.use("/purchase", purchaseRouter);
 app.use("/sale", saleRouter);
+app.use("/tax", taxRouter);
 app.use("/user", userRouter);
 
 app.listen(process.env.PORT, () => console.log("Server is running"));
