@@ -57,7 +57,7 @@ export const delProduct = async (req, res) => {
     if (!prod) return res.sendStatus(404);
 
     await prod.delete();
-    await fs.unlink("static/" + prod._id + ".jpg");
+    fs.unlink("static/" + prod._id + ".jpg", () => {});
     return res.sendStatus(200);
   } catch (error) {
     console.log(error);

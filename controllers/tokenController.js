@@ -1,3 +1,4 @@
+import completeModel from "../models/completeModel.js";
 import tokenModel from "../models/tokenModel.js";
 
 // initial the token
@@ -27,6 +28,16 @@ export const resetToken = async (req, res) => {
     await token.save();
 
     return res.sendStatus(200);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+};
+
+export const openTokens = async (req, res) => {
+  try {
+    const token = await completeModel.find().sort({ _id: -1 }).limit();
+    return res.json(token);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

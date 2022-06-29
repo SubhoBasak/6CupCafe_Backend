@@ -5,12 +5,16 @@ import prodIngModel from "../models/prodIngModel.js";
 import saleModel from "../models/saleModel.js";
 import ingModel from "../models/ingModel.js";
 import taxModel from "../models/taxModel.js";
+import tokenModel from "../models/tokenModel.js";
+import completeModel from "../models/completeModel.js";
 
 export const newSale = async (req, res) => {
   try {
     if (req.body.items.length < 1) return res.sendStatus(204);
 
     let cst = null;
+    let token = null;
+
     if (req.body.phone && req.body.cname) {
       cst = await customerModel.findOneAndUpdate(
         { phone: req.body.phone },
@@ -37,6 +41,9 @@ export const newSale = async (req, res) => {
       else return res.sendStatus(404);
 
       sale.address = req.body.addr;
+    } else {
+      token = await tokenModel.findOne();
+      sale.token = token.start;
     }
 
     for (let i = 0; i < req.body.items.length; i++) {
@@ -71,7 +78,11 @@ export const newSale = async (req, res) => {
     });
     sale.total += tax;
 
+    token.start += 1;
+
     await sale.save();
+    if (token) await token.save();
+
     return res.sendStatus(200);
   } catch (error) {
     console.log(error);
@@ -84,7 +95,7 @@ export const getCurOrders = async (req, res) => {
     return res.json(
       await saleModel
         .find({ orderType: 0, $or: [{ status: 0 }, { status: 1 }] })
-        .select("_id items date status")
+        .select("_id items date status token")
         .populate([
           { path: "items.item", select: "name" },
           { path: "customer", select: "name phone" },
@@ -104,6 +115,10 @@ export const updateOrderStatus = async (req, res) => {
     if (!order) return res.sendStatus(404);
 
     order.status++;
+    if (order.status === 1) await completeModel.create({ token: order.token });
+    else if (order.status === 2)
+      await completeModel.findOneAndDelete({ token: order.token });
+
     await order.save();
 
     return res.sendStatus(200);
