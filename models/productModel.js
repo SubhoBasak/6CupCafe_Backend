@@ -8,7 +8,7 @@ const productSchema = mongoose.Schema({
     ref: "categoryModel",
     required: true,
   },
-  inStock: { type: Boolean, default: true },
+  stock: { type: Number, default: 0, min: 0 },
 });
 
 export default mongoose.model("productModel", productSchema);

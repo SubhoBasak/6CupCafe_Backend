@@ -6,9 +6,9 @@ const saleSchema = mongoose.Schema({
   payMethod: { type: Number, min: 0, required: true },
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "customerModel" },
   orderType: { type: Number, min: 0, required: true },
-  delivery: {type: mongoose.Schema.Types.ObjectId, ref: "deliveryModel"},
+  delivery: { type: mongoose.Schema.Types.ObjectId, ref: "deliveryModel" },
   address: { type: String, trim: true },
-  status: { type: Boolean, default: false },
+  status: { type: Number, default: 0 },
   items: [
     {
       item: {

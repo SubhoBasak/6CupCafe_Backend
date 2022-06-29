@@ -90,26 +90,12 @@ export const editProduct = async (req, res) => {
   }
 };
 
-export const prodOutOfStock = async (req, res) => {
+export const setStock = async (req, res) => {
   try {
     const result = await productModel
-      .findByIdAndUpdate({ _id: req.body.pid }, { inStock: false })
-      .select("_id")
-      .lean();
-
-    if (result) return res.sendStatus(200);
-    else return res.sendStatus(404);
-  } catch (error) {
-    console.log(error);
-    return res.sendStatus(500);
-  }
-};
-
-export const prodInStock = async (req, res) => {
-  try {
-    const result = await productModel
-      .findByIdAndUpdate({ _id: req.body.pid }, { inStock: true })
-      .select("_id")
+      .findByIdAndUpdate(req.body.pid, {
+        stock: Number.parseInt(req.body.stock),
+      })
       .lean();
 
     if (result) return res.sendStatus(200);

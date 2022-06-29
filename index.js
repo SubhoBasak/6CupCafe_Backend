@@ -15,6 +15,7 @@ import prodIngRouter from "./routers/prodIngRouter.js";
 import purchaseRouter from "./routers/purchaseRouter.js";
 import saleRouter from "./routers/saleRouter.js";
 import taxRouter from "./routers/taxRouter.js";
+import tokenRouter from "./routers/tokenRouter.js";
 import userRouter from "./routers/userRouter.js";
 
 dotenv.config();
@@ -24,7 +25,7 @@ if (!fs.existsSync("static")) fs.mkdirSync("static");
 const app = express();
 
 // global middlewares
-app.use(helmet());
+app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(cors());
 app.use(upload({ limits: 5242880 }));
 app.use(express.json({ limit: "1mb" }));
@@ -42,6 +43,7 @@ app.use("/prodIng", prodIngRouter);
 app.use("/purchase", purchaseRouter);
 app.use("/sale", saleRouter);
 app.use("/tax", taxRouter);
+app.use("/token", tokenRouter);
 app.use("/user", userRouter);
 
 app.listen(process.env.PORT, () => console.log("Server is running"));

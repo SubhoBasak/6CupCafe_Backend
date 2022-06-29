@@ -9,6 +9,7 @@ import {
   getCstOrders,
   getCurOrders,
   newSale,
+  updateOrderStatus,
 } from "../controllers/saleController.js";
 
 const router = express.Router();
@@ -16,7 +17,8 @@ const router = express.Router();
 router
   .route("/")
   .get(authUser, isCook, getCurOrders)
-  .post(authUser, isCashier, newSale);
+  .post(authUser, isCashier, newSale)
+  .put(authUser, isCook, updateOrderStatus);
 
 router.get("/cst_orders", authUser, isAdmin, getCstOrders);
 

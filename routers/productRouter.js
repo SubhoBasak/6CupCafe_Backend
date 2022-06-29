@@ -11,8 +11,7 @@ import {
   editProduct,
   getProduct,
   getProductDetails,
-  prodInStock,
-  prodOutOfStock,
+  setStock,
 } from "../controllers/productController.js";
 
 const router = express.Router();
@@ -27,7 +26,6 @@ router
 router.get("/details", authUser, isAdmin, getProductDetails);
 router.get("/cashier", authUser, isCashier, getProduct);
 router.get("/cook", authUser, isCook, getProduct);
-router.put("/stock_in", authUser, prodInStock);
-router.put("/stock_out", authUser, prodOutOfStock);
+router.put("/stock", authUser, isAdmin, setStock);
 
 export default router;

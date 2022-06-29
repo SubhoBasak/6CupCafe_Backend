@@ -42,6 +42,11 @@ export const newSale = async (req, res) => {
     for (let i = 0; i < req.body.items.length; i++) {
       const prd = await productModel.findById(req.body.items[i].pid);
       if (!prd) continue;
+      if (prd.stock < req.body.items[i].qnt) continue;
+      else {
+        prd.stock -= req.body.items[i].qnt;
+        await prd.save();
+      }
 
       sale.items.push({ item: prd._id, quantity: req.body.items[i].qnt });
       sale.total += prd.price * req.body.items[i].qnt;
@@ -78,8 +83,8 @@ export const getCurOrders = async (req, res) => {
   try {
     return res.json(
       await saleModel
-        .find({ status: false, orderType: 1 })
-        .select("items date")
+        .find({ orderType: 0, $or: [{ status: 0 }, { status: 1 }] })
+        .select("_id items date status")
         .populate([
           { path: "items.item", select: "name" },
           { path: "customer", select: "name phone" },
@@ -87,6 +92,21 @@ export const getCurOrders = async (req, res) => {
         .sort({ _id: -1 })
         .lean()
     );
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+};
+
+export const updateOrderStatus = async (req, res) => {
+  try {
+    const order = await saleModel.findById(req.body.oid);
+    if (!order) return res.sendStatus(404);
+
+    order.status++;
+    await order.save();
+
+    return res.sendStatus(200);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);
