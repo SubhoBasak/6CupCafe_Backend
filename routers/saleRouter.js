@@ -8,6 +8,7 @@ import isCook from "../middlewares/isCook.js";
 import {
   getCstOrders,
   getCurOrders,
+  lastOrders,
   newSale,
   updateOrderStatus,
 } from "../controllers/saleController.js";
@@ -21,5 +22,6 @@ router
   .put(authUser, isCook, updateOrderStatus);
 
 router.get("/cst_orders", authUser, isAdmin, getCstOrders);
+router.get("/last_orders", authUser, isCashier, lastOrders);
 
 export default router;

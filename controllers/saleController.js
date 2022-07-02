@@ -142,3 +142,20 @@ export const getCstOrders = async (req, res) => {
     return res.sendStatus(500);
   }
 };
+
+export const lastOrders = async (req, res) => {
+  try {
+    const orders = await saleModel
+      .find()
+      .select("_id items date status token")
+      .populate([
+        { path: "items.item", select: "name" },
+        { path: "customer", select: "name phone" },
+      ])
+      .limit(100);
+    return res.json(orders);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+};
