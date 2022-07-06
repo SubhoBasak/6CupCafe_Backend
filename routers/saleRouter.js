@@ -17,7 +17,7 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(authUser, isCook, getCurOrders)
+  .get(authUser, getCurOrders)
   .post(authUser, isCashier, newSale)
   .put(authUser, isCook, updateOrderStatus);
 

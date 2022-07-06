@@ -100,7 +100,6 @@ export const getCurOrders = async (req, res) => {
           { path: "items.item", select: "name" },
           { path: "customer", select: "name phone" },
         ])
-        .sort({ _id: -1 })
         .lean()
     );
   } catch (error) {

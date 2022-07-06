@@ -4,10 +4,11 @@ export const getFlatReport = async (req, res) => {
   try {
     const report = await saleModel
       .find({
-        date: { $gte: req.body.start, $lte: req.body.end },
+        // date: { $gte: req.body.start, $lte: req.body.end },
       })
-      .select("date total payMethod customer orderType delivery")
-      .populate("customer");
+      .select("date total payMethod customer orderType delivery items")
+      .populate("customer")
+      .lean();
 
     return res.json(report);
   } catch (error) {
@@ -25,7 +26,7 @@ export const getProductReport = async (req, res) => {
       .select("items");
 
     // TODO: COMPLETE THE LOGIC
-    
+
     return res.json(report);
   } catch (error) {
     console.log(error);

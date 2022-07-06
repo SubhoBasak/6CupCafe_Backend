@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import fs from "fs";
 
+// routers
 import categoryRouter from "./routers/categoryRouter.js";
 import customerRouter from "./routers/customerRouter.js";
 import deliveryRouter from "./routers/deliveryRouter.js";
@@ -19,8 +20,8 @@ import taxRouter from "./routers/taxRouter.js";
 import tokenRouter from "./routers/tokenRouter.js";
 import userRouter from "./routers/userRouter.js";
 
+// server configurations
 dotenv.config();
-
 if (!fs.existsSync("static")) fs.mkdirSync("static");
 
 const app = express();
