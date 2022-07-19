@@ -11,6 +11,7 @@ import {
   editProduct,
   getProduct,
   getProductDetails,
+  prodNames,
   setStock,
 } from "../controllers/productController.js";
 
@@ -25,6 +26,7 @@ router
 
 router.get("/details", authUser, isAdmin, getProductDetails);
 router.get("/cashier", authUser, isCashier, getProduct);
+router.get("/names", authUser, isAdmin, prodNames);
 router.get("/cook", authUser, isCook, getProduct);
 router.put("/stock", authUser, isAdmin, setStock);
 

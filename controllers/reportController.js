@@ -1,3 +1,4 @@
+import productModel from "../models/productModel.js";
 import saleModel from "../models/saleModel.js";
 
 export const getFlatReport = async (req, res) => {
@@ -6,7 +7,7 @@ export const getFlatReport = async (req, res) => {
       .find({
         // date: { $gte: req.body.start, $lte: req.body.end },
       })
-      .select("date total payMethod customer orderType delivery items")
+      .select("date total payMethod customer orderType delivery")
       .populate("customer")
       .lean();
 
@@ -19,13 +20,18 @@ export const getFlatReport = async (req, res) => {
 
 export const getProductReport = async (req, res) => {
   try {
+    const prods = await productModel.find().select("name").lean();
     const report = await saleModel
       .find({
         date: { $gte: req.body.start, $lte: req.body.end },
       })
-      .select("items");
+      .select("items")
+      .populate("items.item")
+      .lean();
 
-    // TODO: COMPLETE THE LOGIC
+    report.items.map(data => {
+
+    })
 
     return res.json(report);
   } catch (error) {

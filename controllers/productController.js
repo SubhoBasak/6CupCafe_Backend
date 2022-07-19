@@ -105,3 +105,13 @@ export const setStock = async (req, res) => {
     return res.sendStatus(500);
   }
 };
+
+export const prodNames = async (req, res) => {
+  try {
+    const prods = await productModel.find().select("name price").lean();
+    return res.json(prods);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(5000);
+  }
+};
