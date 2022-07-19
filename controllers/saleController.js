@@ -71,17 +71,18 @@ export const newSale = async (req, res) => {
     }
 
     const taxes = await taxModel.find();
-    let tax = 0;
+    let totalTax = 0;
 
     taxes.map((tax) => {
-      tax += (sale.total * tax.tax) / 100;
+      totalTax += (sale.total * tax.tax) / 100;
     });
-    sale.total += tax;
-
-    token.start += 1;
+    sale.total += totalTax;
 
     await sale.save();
-    if (token) await token.save();
+    if (token) {
+      token.start += 1;
+      await token.save();
+    }
 
     return res.sendStatus(200);
   } catch (error) {
