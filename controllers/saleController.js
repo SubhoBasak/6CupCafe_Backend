@@ -122,9 +122,19 @@ export const newSale = async (req, res) => {
 
 export const getCurOrders = async (req, res) => {
   try {
+    const prvday = new Date();
+    prvday.setDate(prvday.getDate() - 1);
+
+    const nxtday = new Date();
+    nxtday.setDate(nxtday.getDate() + 1);
+
     return res.json(
       await saleModel
-        .find({ orderType: 0, $or: [{ status: 0 }, { status: 1 }] })
+        .find({
+          orderType: 0,
+          $or: [{ status: 0 }, { status: 1 }],
+          $and: [{ date: { $gt: prvday } }, { date: { $lt: nxtday } }],
+        })
         .select("_id items date status token")
         .populate([
           { path: "items.item", select: "name" },
