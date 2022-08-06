@@ -7,6 +7,8 @@ import ingModel from "../models/ingModel.js";
 import taxModel from "../models/taxModel.js";
 import tokenModel from "../models/tokenModel.js";
 import completeModel from "../models/completeModel.js";
+import prodReportModel from "../models/prodReportModel.js";
+import discountModel from "../models/discountModel.js";
 
 export const newSale = async (req, res) => {
   try {
@@ -55,6 +57,25 @@ export const newSale = async (req, res) => {
         await prd.save();
       }
 
+      const TODAY = new Date();
+      let report = await prodReportModel.findOne({
+        year: TODAY.getFullYear(),
+        month: TODAY.getMonth(),
+        prod: prd._id,
+      });
+
+      if (!report) {
+        report = new prodReportModel({
+          year: TODAY.getFullYear(),
+          month: TODAY.getMonth(),
+          prod: prd._id,
+          count: 0,
+        });
+      }
+
+      report.count += req.body.items[i].qnt;
+      await report.save();
+
       sale.items.push({ item: prd._id, quantity: req.body.items[i].qnt });
       sale.total += prd.price * req.body.items[i].qnt;
 
@@ -77,6 +98,14 @@ export const newSale = async (req, res) => {
       totalTax += (sale.total * tax.tax) / 100;
     });
     sale.total += totalTax;
+
+    if (req.body.disc) {
+      const selDisc = await discountModel.findById(req.body.disc);
+      if (selDisc)
+        if (selDisc.mode)
+          sale.total = (sale.total * (100 - selDisc.disc)) / 100;
+        else sale.total -= selDisc.disc;
+    }
 
     await sale.save();
     if (token) {
