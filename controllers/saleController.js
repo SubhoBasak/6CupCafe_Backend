@@ -99,13 +99,15 @@ export const newSale = async (req, res) => {
     });
     sale.total += totalTax;
 
-    if (req.body.disc) {
+    if (req.body.disc !== "NA") {
       const selDisc = await discountModel.findById(req.body.disc);
       if (selDisc)
         if (selDisc.mode)
           sale.total = (sale.total * (100 - selDisc.disc)) / 100;
         else sale.total -= selDisc.disc;
     }
+
+    if (sale.total < 0) sale.total = 0;
 
     await sale.save();
     if (token) {
