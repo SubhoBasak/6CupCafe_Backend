@@ -113,9 +113,9 @@ export const newSale = async (req, res) => {
     if (token) {
       token.start += 1;
       await token.save();
-    }
 
-    return res.sendStatus(200);
+      return res.json({ token: token.start - 1 });
+    } else return res.sendStatus(200);
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

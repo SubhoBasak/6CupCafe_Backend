@@ -36,7 +36,7 @@ export const resetToken = async (req, res) => {
 
 export const openTokens = async (req, res) => {
   try {
-    const token = await completeModel.find().sort({ _id: -1 }).limit();
+    const token = await completeModel.find().limit(12);
     return res.json(token);
   } catch (error) {
     console.log(error);

@@ -8,8 +8,8 @@ export const getFlatReport = async (req, res) => {
     const report = await saleModel
       .find({
         date: {
-          $gte: new Date(req.query.start),
-          $lte: new Date(req.query.end),
+          $gte: req.query.start,
+          $lte: req.query.end,
         },
       })
       .select("total payMethod orderType delivery")
@@ -89,6 +89,7 @@ export const getProductReport = async (req, res) => {
 
     const report = await prodReportModel
       .find({
+        prod: prod._id,
         $and: [
           { year: { $gte: req.query.year }, month: { $gte: 3 } },
           { year: { $lte: req.query.year + 1 } },
