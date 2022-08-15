@@ -107,6 +107,7 @@ export const newSale = async (req, res) => {
         else sale.total -= selDisc.disc;
     }
 
+    sale.total = Math.round(sale.total).toFixed(2);
     if (sale.total < 0) sale.total = 0;
 
     await sale.save();
