@@ -137,10 +137,10 @@ export const getCurOrders = async (req, res) => {
           $or: [{ status: 0 }, { status: 1 }],
           $and: [{ date: { $gt: prvday } }, { date: { $lt: nxtday } }],
         })
-        .select("_id items date status token note orderType delivery")
+        .select("_id items date status token orderType delivery")
         .populate([
           { path: "delivery", select: "name" },
-          { path: "items.item", select: "name" },
+          { path: "items.item", select: "name note" },
           { path: "customer", select: "name phone" },
         ])
         .lean()
