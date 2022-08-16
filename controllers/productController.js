@@ -76,14 +76,13 @@ export const editProduct = async (req, res) => {
 
     if (req.files && req.files.image)
       req.files.image.mv("static/" + prod._id + ".jpg");
-    else {
-      prod.name = req.body.name;
-      prod.price = Number.parseFloat(req.body.price);
-      prod.category = catg._id;
-      prod.note = req.body.note;
 
-      await prod.save();
-    }
+    prod.name = req.body.name;
+    prod.price = Number.parseFloat(req.body.price);
+    prod.category = catg._id;
+    prod.note = req.body.note;
+
+    await prod.save();
 
     return res.sendStatus(200);
   } catch (error) {
