@@ -9,6 +9,7 @@ const productSchema = mongoose.Schema({
     required: true,
   },
   stock: { type: Number, default: 0, min: 0 },
+  note: { type: String, trim: true },
 });
 
 export default mongoose.model("productModel", productSchema);

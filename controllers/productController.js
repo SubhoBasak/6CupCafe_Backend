@@ -13,6 +13,7 @@ export const addProduct = async (req, res) => {
       name: req.body.name,
       price: Number.parseFloat(req.body.price),
       category: catg._id,
+      note: req.body.note,
     });
 
     req.files.image.mv("static/" + prod._id + ".jpg");
@@ -79,6 +80,7 @@ export const editProduct = async (req, res) => {
       prod.name = req.body.name;
       prod.price = Number.parseFloat(req.body.price);
       prod.category = catg._id;
+      prod.note = req.body.note;
 
       await prod.save();
     }
