@@ -110,6 +110,8 @@ export const newSale = async (req, res) => {
     sale.total = Number.parseFloat(Math.round(sale.total).toFixed(2));
     if (sale.total < 0) sale.total = 0;
 
+    if (req.body.parcel) sale.parcel = true;
+
     await sale.save();
     if (token) {
       token.start += 1;
@@ -137,7 +139,7 @@ export const getCurOrders = async (req, res) => {
           $or: [{ status: 0 }, { status: 1 }],
           $and: [{ date: { $gt: prvday } }, { date: { $lt: nxtday } }],
         })
-        .select("_id items date status token orderType delivery")
+        .select("_id parcel items date status token orderType delivery")
         .populate([
           { path: "delivery", select: "name" },
           { path: "items.item", select: "name note" },

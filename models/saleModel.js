@@ -9,6 +9,7 @@ const saleSchema = mongoose.Schema({
   delivery: { type: mongoose.Schema.Types.ObjectId, ref: "deliveryModel" },
   address: { type: String, trim: true },
   status: { type: Number, default: 0 },
+  parcel: { type: Boolean },
   token: { type: Number },
   items: [
     {
