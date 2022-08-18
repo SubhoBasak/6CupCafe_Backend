@@ -3,6 +3,7 @@ import fs from "fs";
 import categoryModel from "../models/categoryModel.js";
 import prodIngModel from "../models/prodIngModel.js";
 import productModel from "../models/productModel.js";
+import prodReportModel from "../models/prodReportModel.js";
 
 export const addProduct = async (req, res) => {
   try {
@@ -59,6 +60,9 @@ export const delProduct = async (req, res) => {
 
     await prod.delete();
     fs.unlink("static/" + prod._id + ".jpg", () => {});
+
+    await prodReportModel.deleteMany({ prod: prod._id });
+
     return res.sendStatus(200);
   } catch (error) {
     console.log(error);
