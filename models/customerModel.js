@@ -11,7 +11,6 @@ const customerSchema = mongoose.Schema(
       trim: true,
       index: true,
     },
-    note: { type: String, trim: true },
     reward: { type: Number, default: 0, min: 0 },
   },
   { timestamps: true }

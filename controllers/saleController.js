@@ -17,22 +17,17 @@ export const newSale = async (req, res) => {
     let cst = null;
     let token = null;
 
-    if (req.body.phone && req.body.cname) {
+    if (req.body.phone && req.body.cname)
       cst = await customerModel.findOneAndUpdate(
         { phone: req.body.phone },
         { name: req.body.cname },
         { upsert: true, new: true }
       );
 
-      if (req.body.note) {
-        cst.note += req.body.note;
-        await cst.save();
-      }
-    }
-
     const sale = new saleModel({
       payMethod: req.body.payMethod,
       orderType: req.body.orderType,
+      note: req.body.note,
       customer: cst ? cst._id : null,
     });
 
@@ -139,7 +134,6 @@ export const getCurOrders = async (req, res) => {
           $or: [{ status: 0 }, { status: 1 }],
           $and: [{ date: { $gt: prvday } }, { date: { $lt: nxtday } }],
         })
-        .select("_id parcel items date status token orderType delivery")
         .populate([
           { path: "delivery", select: "name" },
           { path: "items.item", select: "name note" },
@@ -201,6 +195,30 @@ export const lastOrders = async (req, res) => {
       ])
       .limit(100);
     return res.json(orders);
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(500);
+  }
+};
+
+export const allOrders = async (req, res) => {
+  try {
+    return res.json(
+      await saleModel
+        .find({
+          date: {
+            $gte: new Date(req.query.start),
+            $lt: new Date(req.query.end),
+          },
+        })
+        .populate([
+          { path: "delivery", select: "name" },
+          { path: "items.item", select: "name" },
+          { path: "customer", select: "name phone" },
+        ])
+        .sort({ _id: -1 })
+        .lean()
+    );
   } catch (error) {
     console.log(error);
     return res.sendStatus(500);

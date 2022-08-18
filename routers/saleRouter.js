@@ -6,6 +6,7 @@ import isCashier from "../middlewares/isCashier.js";
 import isCook from "../middlewares/isCook.js";
 
 import {
+  allOrders,
   getCstOrders,
   getCurOrders,
   lastOrders,
@@ -21,6 +22,7 @@ router
   .post(authUser, isCashier, newSale)
   .put(authUser, isCook, updateOrderStatus);
 
+router.get("/all", authUser, isAdmin, allOrders);
 router.get("/cst_orders", authUser, isAdmin, getCstOrders);
 router.get("/last_orders", authUser, isCashier, lastOrders);
 

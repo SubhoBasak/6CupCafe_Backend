@@ -11,9 +11,9 @@ export const addProduct = async (req, res) => {
 
     const prod = await productModel.create({
       name: req.body.name,
+      note: req.body.note,
       price: Number.parseFloat(req.body.price),
       category: catg._id,
-      note: req.body.note,
     });
 
     req.files.image.mv("static/" + prod._id + ".jpg");
@@ -78,9 +78,9 @@ export const editProduct = async (req, res) => {
       req.files.image.mv("static/" + prod._id + ".jpg");
 
     prod.name = req.body.name;
+    prod.note = req.body.note;
     prod.price = Number.parseFloat(req.body.price);
     prod.category = catg._id;
-    prod.note = req.body.note;
 
     await prod.save();
 

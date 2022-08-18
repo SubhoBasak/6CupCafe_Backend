@@ -11,6 +11,7 @@ const saleSchema = mongoose.Schema({
   status: { type: Number, default: 0 },
   parcel: { type: Boolean },
   token: { type: Number },
+  note: { type: String },
   items: [
     {
       item: {
