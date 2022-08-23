@@ -155,9 +155,10 @@ export const updateOrderStatus = async (req, res) => {
     order.status++;
 
     if (order.orderType === 0)
-      if (order.status === 1)
+      if (order.status === 1) {
         await completeModel.create({ token: order.token });
-      else if (order.status === 2)
+        order.completeTime = Date.now();
+      } else if (order.status === 2)
         await completeModel.findOneAndDelete({ token: order.token });
 
     await order.save();
@@ -188,7 +189,7 @@ export const lastOrders = async (req, res) => {
   try {
     const orders = await saleModel
       .find()
-      .select("_id items date status token")
+      .select("_id items date status completeTime token")
       .populate([
         { path: "items.item", select: "name" },
         { path: "customer", select: "name phone" },

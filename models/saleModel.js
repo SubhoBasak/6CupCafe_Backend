@@ -7,6 +7,7 @@ const saleSchema = mongoose.Schema({
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "customerModel" },
   orderType: { type: Number, min: 0, required: true },
   delivery: { type: mongoose.Schema.Types.ObjectId, ref: "deliveryModel" },
+  completeTime: { type: Date },
   address: { type: String, trim: true },
   status: { type: Number, default: 0 },
   parcel: { type: Boolean },
