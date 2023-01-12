@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const saleSchema = mongoose.Schema({
   date: { type: Date, default: Date.now },
   total: { type: Number, default: 0, min: 0 },
-  payMethod: { type: Number, min: 0, required: true },
+  payMethod: { type: Number, min: 0, required:true },
   customer: { type: mongoose.Schema.Types.ObjectId, ref: "customerModel" },
   orderType: { type: Number, min: 0, required: true },
   delivery: { type: mongoose.Schema.Types.ObjectId, ref: "deliveryModel" },

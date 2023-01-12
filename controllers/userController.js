@@ -4,7 +4,7 @@ import userModel from "../models/userModel.js";
 userModel
   .findOneAndUpdate(
     { email: "admin@email.com" },
-    { email: "admin@email.com", name: "Admin", role: 0, password: "p@$$W0rd" },
+    { email: "admin@email.com", name: "Admin", role: 0, password: "ankush" },
     { upsert: true, new: true }
   )
   .then(() => console.log("Default admin created"));

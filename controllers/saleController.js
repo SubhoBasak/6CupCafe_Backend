@@ -131,7 +131,7 @@ export const getCurOrders = async (req, res) => {
     return res.json(
       await saleModel
         .find({
-          $or: [{ status: 0 }, { status: 1 }],
+          $or: [{ status: 0 }, { status: 1 }, {status: 2}],
           $and: [{ date: { $gt: prvday } }, { date: { $lt: nxtday } }],
         })
         .populate([
@@ -155,14 +155,15 @@ export const updateOrderStatus = async (req, res) => {
     order.status++;
 
     if (order.orderType === 0)
-      if (order.status === 1) {
+      
+      if (order.status === 2) {
         await completeModel.create({ token: order.token });
         order.completeTime = Date.now();
-      } else if (order.status === 2)
+      } else if (order.status === 3)
         await completeModel.findOneAndDelete({ token: order.token });
 
     await order.save();
-
+    
     return res.sendStatus(200);
   } catch (error) {
     console.log(error);
